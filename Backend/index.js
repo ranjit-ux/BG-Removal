@@ -3,6 +3,7 @@ import cors from "cors"
 import dotenv from "dotenv"
 import { connect } from "mongoose";
 import connectDB from "./configs/mongodb.js";
+import userRouter from "./routes/userRoutes.js";
 
 //App Config
 dotenv.config();
@@ -18,6 +19,8 @@ app.use(cors());
 app.get('/', (req,res)=>{
     res.send("API Working")
 })
+
+app.use('/api/user',userRouter);
 
 //APP Listen
 app.listen(PORT, ()=>{
