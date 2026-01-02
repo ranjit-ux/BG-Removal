@@ -12,7 +12,6 @@ const PORT=process.env.PORT || 4000;
 await connectDB();
 
 //Initialize Middlewares
-app.use(express.json());
 app.use(cors());
 
 //API Routes
@@ -21,6 +20,9 @@ app.get('/', (req,res)=>{
 })
 
 app.use('/api/user',userRouter);
+
+app.use(express.json());
+
 
 //APP Listen
 app.listen(PORT, ()=>{
