@@ -7,6 +7,7 @@ const clerkWebhooks = async (req, res) => {
 
     // req.body is Buffer → convert to string
     const payload = req.body.toString();
+    console.log("Webhook payload received");
 
     const headers = {
       "svix-id": req.headers["svix-id"],
@@ -14,8 +15,10 @@ const clerkWebhooks = async (req, res) => {
       "svix-signature": req.headers["svix-signature"],
     };
 
+
     // IMPORTANT: verify returns the event
     const event = wh.verify(payload, headers);
+    console.log("Verified event:", event.type);
 
     const { data, type } = event;
 
