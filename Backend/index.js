@@ -32,30 +32,33 @@
 // })
 
 
-
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./configs/mongodb.js";
+import { clerkWebhook } from "./controllers/userController.js";
 import userRouter from "./routes/userRoutes.js";
 
 dotenv.config();
 
 const app = express();
 
-// Webhook route must be raw
-app.use("/api/user/webhook", express.raw({ type: "application/json" }));
-
 app.use(cors());
+
+// Webhook MUST come before express.json
+app.post(
+  "/api/user/webhook",
+  express.raw({ type: "application/json" }),
+  clerkWebhook
+);
+
 app.use(express.json());
 
-// health check
 app.get("/", async (req, res) => {
   await connectDB();
   res.send("API Working");
 });
 
-// API routes
 app.use("/api/user", async (req, res, next) => {
   await connectDB();
   next();
