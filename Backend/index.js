@@ -43,21 +43,22 @@ dotenv.config();
 
 const app = express();
 
-// Webhook MUST come before express.json()
-app.use(
-  "/api/user/webhook",
-  express.raw({ type: "application/json" })
-);
+// Webhook route must be raw
+app.use("/api/user/webhook", express.raw({ type: "application/json" }));
 
 app.use(cors());
 app.use(express.json());
 
-await connectDB();
-
-app.get("/", (req, res) => {
+// health check
+app.get("/", async (req, res) => {
+  await connectDB();
   res.send("API Working");
 });
 
-app.use("/api/user", userRouter);
+// API routes
+app.use("/api/user", async (req, res, next) => {
+  await connectDB();
+  next();
+}, userRouter);
 
-export default app;   // Vercel needs this
+export default app;
