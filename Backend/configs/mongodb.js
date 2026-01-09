@@ -1,20 +1,24 @@
 import mongoose from "mongoose";
 
+let isConnected = false;
+
 const connectDB = async ()=>{
     try{
 
-        mongoose.connection.on('connected',()=>{
-            console.log("MongoDB Database connected");
-        })
+        if(isConnected) return;
 
-        await mongoose.connect(`${process.env.MONGODB_URI}/bg-removal`)
+        const db = await mongoose.connect(`${process.env.MONGODB_URI}/bg-removal`,{
+            bufferCommands: false,
+        });
+
+        isConnected=true;
+        console.log("MongoDB connected:", db.connection.host);
 
 
     }catch(err){
 
-        console.error("MongoDB connection failed");
-        console.error(err.message);
-        
+        console.error("MongoDB connection failed",err.message);
+        throw err;        
     }
 }
 
