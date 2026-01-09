@@ -7,10 +7,10 @@ const userSchema = new mongoose.Schema(
         photo: { type: String, default:"" },
         firstName: { type: String },
         lastName: { type: String },
-        creditBalance: { type: Number, default: 5 , min:0},
+        creditBalance: { type: Number, default: 1 , min:0},
     }
 );
 
-const UserModel = mongoose.model("User", userSchema);
+const UserModel = mongoose.models.user || mongoose.model("User", userSchema);
 
 export default UserModel;

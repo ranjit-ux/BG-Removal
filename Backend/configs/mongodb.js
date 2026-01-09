@@ -4,9 +4,11 @@ const connectDB = async ()=>{
     try{
 
         mongoose.connection.on('connected',()=>{
-        console.log("MongoDB Database connected");
+            console.log("MongoDB Database connected");
         })
+
         await mongoose.connect(`${process.env.MONGODB_URI}/bg-removal`)
+
 
     }catch(err){
 
