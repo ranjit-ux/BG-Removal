@@ -14,7 +14,7 @@ const connectDB = async () => {
       .connect(`${process.env.MONGODB_URI}/bg-removal`, {
         bufferCommands: false,
       })
-      .then(m => m)
+      .then((mongoose) => mongoose)
   }
 
   cached.conn = await cached.promise
