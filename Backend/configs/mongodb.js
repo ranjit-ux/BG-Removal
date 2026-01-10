@@ -1,25 +1,24 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 
-let isConnected = false;
+let cached = global.mongoose
 
-const connectDB = async ()=>{
-    try{
-
-        if(isConnected) return;
-
-        const db = await mongoose.connect(`${process.env.MONGODB_URI}/bg-removal`,{
-            bufferCommands: false,
-        });
-
-        isConnected=true;
-        console.log("MongoDB connected:", db.connection.host);
-
-
-    }catch(err){
-
-        console.error("MongoDB connection failed",err.message);
-        throw err;        
-    }
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null }
 }
 
-export default connectDB;
+const connectDB = async () => {
+  if (cached.conn) return cached.conn
+
+  if (!cached.promise) {
+    cached.promise = mongoose
+      .connect(`${process.env.MONGODB_URI}/bg-removal`, {
+        bufferCommands: false,
+      })
+      .then(m => m)
+  }
+
+  cached.conn = await cached.promise
+  return cached.conn
+}
+
+export default connectDB
