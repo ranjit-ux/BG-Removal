@@ -1,34 +1,23 @@
 import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
-import connectDB from "./configs/mongodb.js";
-import userRouter from "./routes/userRoutes.js";
+import serverless from "serverless-http"
+import connectDB from "./configs/mongodb.js"
+import userRouter from "./routes/userRoutes.js"
 
-dotenv.config();
+dotenv.config()
 
-const app=express();
+const app = express()
 
-app.use('/api/user/webhook', userRouter)
+await connectDB()
 
-const PORT=process.env.PORT || 3000;
+app.use(cors())
+app.use(express.json())
 
-await connectDB();
+app.use("/api/user/webhook", userRouter)
 
-app.use(cors());
-
-
-app.use(express.json());
-
-app.get('/', (req,res)=>{
-    res.send("API Working")
+app.get("/", (req, res) => {
+  res.send("API Working")
 })
 
-// app.use('/api/user/webhook', userRouter)
-
-
-//APP Listen
-app.listen(PORT, ()=>{
-    console.log(`Server running on Port ${PORT}`);
-})
-
-
+export const handler = serverless(app)
