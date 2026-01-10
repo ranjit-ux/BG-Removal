@@ -59,9 +59,9 @@ app.get("/", async (req, res) => {
   res.send("API Working");
 });
 
-app.use("/api/user", async (req, res, next) => {
+app.use("/api/user.webhook", async (req, res, next) => {
   await connectDB();
-  next();
+  // next();
 }, userRouter);
 
 export default app;
