@@ -13,10 +13,11 @@ connectDB()
 
 app.use(cors())
 app.use(express.json())
+
 app.use("/api/user/webhook", userRouter)
 
 app.get("/", (req, res) => {
   res.send("API Working")
 })
 
-export const handler = serverless(app)
+export default serverless(app)
